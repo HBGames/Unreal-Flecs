@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Standard/Hashing.h"
 #include "FlecsScriptStructComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -11,17 +10,17 @@ struct FLECSLIBRARY_API FFlecsScriptStructComponent
 {
     GENERATED_BODY()
 
-    NO_DISCARD FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptStructComponent& InScriptStructComponent)
+    [[nodiscard]] FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptStructComponent& InScriptStructComponent)
     {
         return GetTypeHash(InScriptStructComponent.ScriptStruct);
     }
 
-    NO_DISCARD FORCEINLINE friend bool operator==(const FFlecsScriptStructComponent& Lhs, const FFlecsScriptStructComponent& Rhs)
+    [[nodiscard]] FORCEINLINE friend bool operator==(const FFlecsScriptStructComponent& Lhs, const FFlecsScriptStructComponent& Rhs)
     {
         return Lhs.ScriptStruct == Rhs.ScriptStruct;
     }
 
-    NO_DISCARD FORCEINLINE friend bool operator!=(const FFlecsScriptStructComponent& Lhs, const FFlecsScriptStructComponent& Rhs)
+    [[nodiscard]] FORCEINLINE friend bool operator!=(const FFlecsScriptStructComponent& Lhs, const FFlecsScriptStructComponent& Rhs)
     {
         return !(Lhs == Rhs);
     }
@@ -40,4 +39,9 @@ struct FLECSLIBRARY_API FFlecsScriptStructComponent
     
 }; // struct FFlecsScriptStructComponent
 
-DEFINE_STD_HASH(FFlecsScriptStructComponent)
+template <>
+struct std::hash<FFlecsScriptStructComponent>
+{
+public:
+	inline std::size_t operator()(const FFlecsScriptStructComponent& Value) const noexcept { return GetTypeHash(Value); }
+};
