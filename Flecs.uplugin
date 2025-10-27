@@ -2,12 +2,12 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.1",
-	"FriendlyName": "UnrealFlecs",
+	"FriendlyName": "Flecs",
 	"Description": "",
 	"Category": "ECS",
-	"CreatedBy": "Reddy-dev",
+	"CreatedBy": "Hitbox Games, LLC",
 	"CreatedByURL": "",
-	"Copyright": "Elie Wiese-Namir © 2025. All Rights Reserved.",
+	"Copyright": "Copyright Hitbox Games, LLC. All Rights Reserved.",
 	"DocsURL": "https://www.flecs.dev/",
 	"MarketplaceURL": "",
 	"CanContainContent": true,
@@ -24,12 +24,6 @@
 			"Name": "UnrealFlecsTests",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "PostDefault"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "SolidMacros",
-			"Enabled": true
 		}
 	],
 	"SupportURL": ""
