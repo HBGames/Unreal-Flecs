@@ -72,6 +72,11 @@ struct type {
         }
     }
 
+	/** Implicit conversion to world_t */
+	operator world_t*() const {
+		return world_;
+	}
+
     /** Implicit conversion to type_t */
     operator const type_t*() const {
         return type_;
