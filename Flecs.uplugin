@@ -19,11 +19,6 @@
 			"Name": "FlecsLibrary",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "UnrealFlecsTests",
-			"Type": "UncookedOnly",
-			"LoadingPhase": "PostDefault"
 		}
 	],
 	"SupportURL": ""
