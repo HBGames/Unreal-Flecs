@@ -21,16 +21,6 @@
 			"LoadingPhase": "PreDefault"
 		},
 		{
-			"Name": "UnrealFlecs",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "UnrealFlecsEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "UnrealFlecsTests",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "PostDefault"
