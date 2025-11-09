@@ -10,6 +10,10 @@ UFlecsSystem_SignalBase::UFlecsSystem_SignalBase(const FObjectInitializer& Objec
 	ExecutionFlags = (int32)EFlecsSystemExecutionFlags::AllNetModes;
 }
 
+void UFlecsSystem_SignalBase::BuildSystem(flecs::system_builder<>& SystemBuilder)
+{
+}
+
 void UFlecsSystem_SignalBase::Run(flecs::iter& Iterator)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(SignalEntities);
@@ -21,6 +25,21 @@ void UFlecsSystem_SignalBase::Run(flecs::iter& Iterator)
 		UE::TRWScopeLock Lock(ReceivedSignalLock, SLT_Write);
 		CurrentFrameBufferIndex = (CurrentFrameBufferIndex + 1) % BuffersCount;
 	}
+
+	FFrameReceivedSignals& ProcessingFrameBuffer = FrameReceivedSignals[ProcessingFrameBufferIndex];
+	TArray<FEntitySignalRange>& ReceivedSignalRanges = ProcessingFrameBuffer.ReceivedSignalRanges;
+	TArray<FFlecsEntityView>& SignaledEntities = ProcessingFrameBuffer.SignaledEntities;
+
+	if (ReceivedSignalRanges.IsEmpty())
+	{
+		return;
+	}
+
+	// TODO - The rest!!!
+	ensure(false);
+
+	ReceivedSignalRanges.Reset();
+	SignaledEntities.Reset();
 }
 
 void UFlecsSystem_SignalBase::BeginDestroy()

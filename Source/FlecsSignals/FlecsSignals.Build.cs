@@ -11,6 +11,7 @@ public class FlecsSignals : ModuleRules
 			{
 				"Core",
 				"FlecsEntity",
+				"FlecsLibrary",
 			}
 		);
 

@@ -47,7 +47,7 @@ struct FFlecsWorld
 
 	/** Create a Flecs world. */
 	FFlecsWorld()
-		: World(flecs::world()),
+		: World(nullptr),
 		  Owner(nullptr)
 	{
 		// TypeMapComponent = GetTypeMapComponent(); // NOLINT(cppcoreguidelines-prefer-member-initializer)
@@ -161,7 +161,7 @@ struct FFlecsWorld
 	 * @see ecs_frame_begin()
 	 * @see FFlecsWorld::FrameEnd()
 	 */
-	float FrameBegin(const float InDeltaTime = 0.0f) const { return World.frame_begin(InDeltaTime); }
+	ecs_ftime_t FrameBegin(const float InDeltaTime = 0.0f) const { return World.frame_begin(InDeltaTime); }
 
 
 	/** End frame.
@@ -1032,7 +1032,7 @@ private:
 
 #if WITH_FLECSENTITY_DEBUG
 
-	void InitDebugName() { DebugName = Owner ? (Owner->GetName() + TEXT("_FlecsWorld")) : TEXT("Unset"); }
+	void InitDebugName() { DebugName = Owner.IsValid() ? (Owner->GetName() + TEXT("_FlecsWorld")) : TEXT("Unset"); }
 
 	FString DebugName;
 #endif

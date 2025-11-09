@@ -11,6 +11,7 @@ public class FlecsAIBehavior : ModuleRules
 			{
 				"Core",
 				"FlecsEntity",
+				"FlecsLibrary",
 				"FlecsSignals",
 			}
 		);
@@ -22,6 +23,7 @@ public class FlecsAIBehavior : ModuleRules
 				"Engine",
 				"FlecsActors",
 				"FlecsLOD",
+				"FlecsSimulation",
 			}
 		);
 	}

@@ -3,10 +3,13 @@
 #pragma once
 
 #include "Settings/FlecsModuleSettings.h"
+#include "FlecsLODTypes.h"
 
 #include "FlecsBehaviorSettings.generated.h"
 
 #define UE_API FLECSAIBEHAVIOR_API
+
+class UFlecsSystem_StateTree;
 
 /**
  * 
@@ -27,7 +30,7 @@ public:
 	 * Can be also set via DefaultFlecs.ini file.
 	 */
 	UPROPERTY(Config, EditAnywhere, Category="Flecs|StateTree", NoClear)
-	TSoftClassPtr<UFlecsStateTreeSystem> DynamicStateTreeSystemClass;
+	TSoftClassPtr<UFlecsSystem_StateTree> DynamicStateTreeSystemClass;
 };
 
 #undef UE_API

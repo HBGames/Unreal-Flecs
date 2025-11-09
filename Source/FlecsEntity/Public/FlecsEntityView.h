@@ -43,9 +43,12 @@ struct UE_API FFlecsEntityView : public FFlecsId
 
 	operator flecs::entity_view() const { return View(); }
 
+	bool operator==(const Self& Other) const { return id_ == Other.id_; }
+	bool operator!=(const Self& Other) const { return !(*this == Other); }
+
 	flecs::entity_view View() const { return BitCast<flecs::entity_view>(*this); }
 
-	const FString& DebugGetDescription() const { return FString::Printf(TEXT("id: %llu, name: %s"), id_, *Name()); }
+	FString DebugGetDescription() const { return FString::Printf(TEXT("id: %llu, name: %s"), id_, *Name()); }
 
 	/** Check if entity is valid.
 	 * An entity is valid if:
@@ -134,6 +137,12 @@ struct UE_API FFlecsEntityView : public FFlecsId
 	 *
 	 * @return The entity's type.
 	 */
+
+public:
+	friend uint32 GetTypeHash(const FFlecsEntityView& InEntityView)
+	{
+		return GetTypeHash(InEntityView.id_);
+	}
 };
 
 static_assert(sizeof(FFlecsEntityView) == sizeof(flecs::entity_view), "FFlecsEntityView size mismatch with flecs::entity_view");

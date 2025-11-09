@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class FlecsNavMeshNavigation : ModuleRules
+public class FlecsSimulation : ModuleRules
 {
-	public FlecsNavMeshNavigation(ReadOnlyTargetRules Target) : base(Target)
+	public FlecsSimulation(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -11,7 +11,6 @@ public class FlecsNavMeshNavigation : ModuleRules
 			{
 				"Core",
 				"FlecsEntity",
-				"FlecsLibrary",
 			}
 		);
 
@@ -20,7 +19,6 @@ public class FlecsNavMeshNavigation : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"FlecsSignals",
 			}
 		);
 	}

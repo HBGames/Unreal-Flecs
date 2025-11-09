@@ -74,6 +74,8 @@ struct UE_API FFlecsId
 	operator flecs::id_t() const { return id_; }
 	operator flecs::world_t*() const { return world_; }
 
+	bool operator==(const FFlecsId& Other) const { return Id().raw_id() == Other.Id().raw_id(); }
+
 	/** Test if id is pair (has first, second) */
 	bool IsPair() const { return Id().is_pair(); }
 
@@ -172,6 +174,12 @@ protected:
 	 * the id are valid */
 	flecs::world_t* world_ = nullptr;
 	flecs::id_t id_ = 0;
+
+public:
+	friend uint32 GetTypeHash(const FFlecsId& InId)
+	{
+		return GetTypeHash(InId.id_);
+	}
 };
 
 static_assert(sizeof(FFlecsId) == sizeof(flecs::id), "FFlecsId size mismatch with flecs::id");

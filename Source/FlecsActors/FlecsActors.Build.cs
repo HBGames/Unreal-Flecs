@@ -11,6 +11,7 @@ public class FlecsActors : ModuleRules
 			{
 				"Core",
 				"FlecsEntity",
+				"FlecsLibrary",
 			}
 		);
 

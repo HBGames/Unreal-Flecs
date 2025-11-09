@@ -2,9 +2,11 @@
 
 #pragma once
 
-#include "FlecsEntityView.h"
 #include "Systems/FlecsSystem.h"
-
+#include "FlecsSignalTypes.h"
+#include "FlecsEntityView.h"
+#include "Containers/StaticArray.h"
+#include "Misc/TransactionallySafeRWLock.h"
 #include "FlecsSystem_SignalBase.generated.h"
 
 #define UE_API FLECSSIGNALS_API
@@ -24,11 +26,9 @@ public:
 	UE_API UFlecsSystem_SignalBase(const FObjectInitializer& ObjectInitializer);
 
 protected:
-	virtual void BuildSystem(flecs::system_builder<>& SystemBuilder) override
-	{
-	}
+	UE_API virtual void BuildSystem(flecs::system_builder<>& SystemBuilder) override;
 
-	virtual void Run(flecs::iter& Iterator) override;
+	UE_API virtual void Run(flecs::iter& Iterator) override;
 
 	UE_API virtual void BeginDestroy() override;
 

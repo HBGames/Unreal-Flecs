@@ -46,7 +46,7 @@ void UFlecsSystem::CallInitialize(const TNotNull<UObject*> InOwner, const FFlecs
 		}
 #endif
 
-		flecs::system_builder<> System = InFlecsWorld.System(GetSystemName());
+		flecs::system_builder<> System = InFlecsWorld.System(reinterpret_cast<const char*>(StringCast<UTF8CHAR>(*GetSystemName()).Get()));
 
 		System.immediate(bImmediate);
 		System.multi_threaded(bMultithreaded);

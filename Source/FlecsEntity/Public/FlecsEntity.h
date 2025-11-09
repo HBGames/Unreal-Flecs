@@ -361,6 +361,12 @@ protected:
 	{
 		return *static_cast<const Self*>(this);
 	}
+
+public:
+	friend uint32 GetTypeHash(const FFlecsEntity& InEntity)
+	{
+		return GetTypeHash(InEntity.id_);
+	}
 };
 
 static_assert(sizeof(FFlecsEntity) == sizeof(flecs::entity), "FFlecsEntity size not equal to flecs::entity");

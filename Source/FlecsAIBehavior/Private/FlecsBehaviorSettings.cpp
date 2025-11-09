@@ -1,7 +1,7 @@
 ﻿// Copyright Hitbox Games, LLC. All Rights Reserved.
 
 #include "FlecsBehaviorSettings.h"
-#include "FlecsLODTypes.h"
+#include "FlecsSystem_StateTree.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlecsBehaviorSettings)
 
@@ -14,5 +14,5 @@ UFlecsBehaviorSettings::UFlecsBehaviorSettings(const FObjectInitializer& ObjectI
 	MaxActivationsPerLOD[EFlecsLOD::Low] = 100;
 	MaxActivationsPerLOD[EFlecsLOD::Off] = 100;
 
-	DynamicStateTreeSystemClass = UFlecsStateTreeSystem::StaticClass();
+	DynamicStateTreeSystemClass = UFlecsSystem_StateTree::StaticClass();
 }

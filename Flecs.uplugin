@@ -38,15 +38,20 @@
 		{
 			"Name": "FlecsLibrary",
 			"Type": "Runtime",
-			"LoadingPhase": "EarliestPossible"
+			"LoadingPhase": "PostConfigInit"
 		},
 		{
 			"Name": "FlecsLOD",
 			"Type": "Runtime",
-			"LoadingPhase": "EarliestPossible"
+			"LoadingPhase": "Default"
 		},
 		{
 			"Name": "FlecsSignals",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "FlecsSimulation",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

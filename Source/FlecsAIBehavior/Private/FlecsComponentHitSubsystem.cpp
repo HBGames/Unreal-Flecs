@@ -6,6 +6,7 @@
 #include "FlecsAgentSubsystem.h"
 #include "Components/CapsuleComponent.h"
 #include "FlecsSignals/Public/FlecsSignalSubsystem.h"
+#include "FlecsSimulationSubsystem.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlecsComponentHitSubsystem)
 
@@ -31,7 +32,7 @@ const FFlecsHitResult* UFlecsComponentHitSubsystem::GetLastHit(const FFlecsEntit
 void UFlecsComponentHitSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-	Collection.InitializeDependency<UFlecsSimulationSubsystem>();
+	auto TEST = Collection.InitializeDependency<UFlecsSimulationSubsystem>();
 
 	SignalSubsystem = Collection.InitializeDependency<UFlecsSignalSubsystem>();
 	checkfSlow(SignalSubsystem != nullptr, TEXT("FlecsSignalSubsystem is required"));

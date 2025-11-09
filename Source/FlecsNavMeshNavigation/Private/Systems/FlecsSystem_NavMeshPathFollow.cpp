@@ -2,6 +2,7 @@
 
 #include "Systems/FlecsSystem_NavMeshPathFollow.h"
 
+#include "FlecsSignalSubsystem.h"
 #include "Phases/FlecsPhase.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlecsSystem_NavMeshPathFollow)
