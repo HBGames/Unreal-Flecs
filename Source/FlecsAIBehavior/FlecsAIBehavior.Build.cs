@@ -20,6 +20,7 @@ public class FlecsAIBehavior : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"FlecsActors",
+				"FlecsLOD",
 			}
 		);
 	}
