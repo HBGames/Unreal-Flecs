@@ -11,6 +11,7 @@ public class FlecsAIBehavior : ModuleRules
 			{
 				"Core",
 				"FlecsEntity",
+				"FlecsSignals",
 			}
 		);
 
