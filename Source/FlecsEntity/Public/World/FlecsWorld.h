@@ -4,6 +4,7 @@
 
 #include "flecs.h"
 #include "FlecsEntity.h"
+#include "FlecsEntityMacros.h"
 
 #include "FlecsWorld.generated.h"
 
@@ -45,49 +46,65 @@ struct FFlecsWorld
 	GENERATED_BODY()
 
 	/** Create a Flecs world. */
-	FFlecsWorld() : World(flecs::world())
+	FFlecsWorld()
+		: World(flecs::world()),
+		  Owner(nullptr)
 	{
+		// TypeMapComponent = GetTypeMapComponent(); // NOLINT(cppcoreguidelines-prefer-member-initializer)
+		// check(TypeMapComponent);
+#if WITH_FLECSENTITY_DEBUG
+		InitDebugName();
+#endif
 	}
-
-	~FFlecsWorld() { World.release(); }
 
 	/** Create world with command line arguments.
 	 * Currently command line arguments are not interpreted, but they may be
 	 * used in the future to configure Flecs parameters.
 	 */
-	UE_NODISCARD_CTOR explicit FFlecsWorld(const int argc, char* argv[])
-		: World(argc, argv)
+	UE_NODISCARD_CTOR explicit FFlecsWorld(const int argc, char* argv[], UObject* InOwner)
+		: World(argc, argv),
+		  Owner(InOwner)
 	{
+#if WITH_FLECSENTITY_DEBUG
+		InitDebugName();
+#endif
 	}
 
 	/** Create world from C world. */
-	UE_NODISCARD_CTOR explicit FFlecsWorld(FFlecsWorldType* InWorld)
-		: World(InWorld)
+	UE_NODISCARD_CTOR explicit FFlecsWorld(FFlecsWorldType* InWorld, UObject* InOwner)
+		: World(InWorld),
+		  Owner(InOwner)
 	{
+#if WITH_FLECSENTITY_DEBUG
+		InitDebugName();
+#endif
 	}
 
 	/** Implicit conversion from flecs::world. */
-	UE_NODISCARD_CTOR FFlecsWorld(const flecs::world& InWorld)
-		: World(InWorld)
+	UE_NODISCARD_CTOR FFlecsWorld(const flecs::world& InWorld, UObject* InOwner)
+		: World(InWorld),
+		  Owner(InOwner)
 	{
+#if WITH_FLECSENTITY_DEBUG
+		InitDebugName();
+#endif
 	}
 
-	/** NOT allowed to copy a world. May only take a reference. */
-	FFlecsWorld(const FFlecsWorld& Other) { this->World = Other.World; }
+	// Let flecs::world handle reference counting and lifetime.
+	FFlecsWorld(const FFlecsWorld&) = default;
+	FFlecsWorld(FFlecsWorld&&) noexcept = default;
+	FFlecsWorld& operator=(const FFlecsWorld&) = default;
+	FFlecsWorld& operator=(FFlecsWorld&&) noexcept = default;
 
-	FFlecsWorld(FFlecsWorld&& Other) noexcept { this->World = MoveTemp(Other.World); }
+	// No need to call World.release() explicitly; flecs::world::~world already does.
+	~FFlecsWorld() = default;
 
-	FFlecsWorld& operator=(const FFlecsWorld& Other) noexcept
-	{
-		this->World = Other.World;
-		return *this;
-	}
-
-	FFlecsWorld& operator=(FFlecsWorld&& Other) noexcept
-	{
-		this->World = MoveTemp(Other.World);
-		return *this;
-	}
+	/** 
+	 * Fetches the world associated with the Owner. 
+	 * @note that it's ok for a given FlecsWorld to not have an owner or the owner not being part of a UWorld, depending on the use case
+	 */
+	UWorld* GetWorld() const { return Owner.IsValid() ? Owner->GetWorld() : nullptr; }
+	UObject* GetOwner() const { return Owner.Get(); }
 
 	/* Releases the underlying world object. If this is the last handle, the world will be finalized. */
 	void Release() { World.release(); }
@@ -296,7 +313,7 @@ struct FFlecsWorld
 	 * @param InStageId The index of the stage to retrieve.
 	 * @return A thread-specific pointer to the world.
 	 */
-	FFlecsWorld GetStage(const int32 InStageId) const { return FFlecsWorld(World.get_stage(InStageId)); }
+	FFlecsWorld GetStage(const int32 InStageId) const { return FFlecsWorld(World.get_stage(InStageId), Owner.Get()); }
 
 	/** Create asynchronous stage.
 	 * An asynchronous stage can be used to asynchronously queue operations for
@@ -313,7 +330,7 @@ struct FFlecsWorld
 	 *
 	 * @return The stage.
 	 */
-	FFlecsWorld AsyncStage() const { return FFlecsWorld(World.async_stage()); }
+	FFlecsWorld AsyncStage() const { return FFlecsWorld(World.async_stage(), Owner.Get()); }
 
 
 	/** Get actual world.
@@ -322,7 +339,7 @@ struct FFlecsWorld
 	 *
 	 * @return The actual world.
 	 */
-	FFlecsWorld GetWorld() const { return FFlecsWorld(World.get_world()); }
+	FFlecsWorld GetFlecsWorld() const { return FFlecsWorld(World.get_world(), Owner.Get()); }
 
 
 	/** Test whether the current world object is readonly.
@@ -1012,6 +1029,18 @@ struct FFlecsWorld
 
 private:
 	flecs::world World;
+
+#if WITH_FLECSENTITY_DEBUG
+
+	void InitDebugName() { DebugName = Owner ? (Owner->GetName() + TEXT("_FlecsWorld")) : TEXT("Unset"); }
+
+	FString DebugName;
+#endif
+
+	/** Optional UObject that conceptually owns / is associated with this world. */
+	TWeakObjectPtr<UObject> Owner;
+
+	uint8* TypeMapComponent = nullptr;
 };
 
 #undef UE_API

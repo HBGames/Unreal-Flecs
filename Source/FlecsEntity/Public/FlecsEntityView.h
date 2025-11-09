@@ -45,6 +45,8 @@ struct UE_API FFlecsEntityView : public FFlecsId
 
 	flecs::entity_view View() const { return BitCast<flecs::entity_view>(*this); }
 
+	const FString& DebugGetDescription() const { return FString::Printf(TEXT("id: %llu, name: %s"), id_, *Name()); }
+
 	/** Check if entity is valid.
 	 * An entity is valid if:
 	 * - its id is not 0
@@ -69,6 +71,11 @@ struct UE_API FFlecsEntityView : public FFlecsId
 	bool IsAlive() const
 	{
 		return View().is_alive();
+	}
+
+	bool IsSet() const
+	{
+		return id_ != 0;
 	}
 
 	/** Return the entity name.

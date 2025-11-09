@@ -26,8 +26,7 @@ void UFlecsSystem::CallInitialize(const TNotNull<UObject*> InOwner, const FFlecs
 {
 	if (ensure(HasAnyFlags(RF_ClassDefaultObject) == false && GetClass()->HasAnyClassFlags(CLASS_Abstract) == false))
 	{
-		// TODO
-		ensure(false);
+		check(InFlecsWorld);
 
 #if WITH_FLECSENTITY_DEBUG
 		constexpr bool bDebugTraceSystemsEnabled = true;
@@ -47,8 +46,18 @@ void UFlecsSystem::CallInitialize(const TNotNull<UObject*> InOwner, const FFlecs
 		}
 #endif
 
-		flecs::system_builder<> System = InFlecsWorld.System("TEST");
-		System.immediate();
+		flecs::system_builder<> System = InFlecsWorld.System(GetSystemName());
+
+		System.immediate(bImmediate);
+		System.multi_threaded(bMultithreaded);
+		System.interval(Interval);
+		System.rate(Rate);
+		System.priority(Priority);
+		System.kind(GetDefault<UFlecsPhase>(ExecuteInPhase)->GetFlecsPhaseId());
+
+		BuildSystem(System);
+
+		InitializeInternal(*InOwner, InFlecsWorld);
 
 		bInitialized = true;
 	}
@@ -151,9 +160,9 @@ void UFlecsSystem::SetShouldAutoRegisterWithGlobalList(const bool bAutoRegister)
 	{
 		bAutoRegisterWithSystemPhases = bAutoRegister;
 #if WITH_EDITOR
-		if (UClass* Class = GetClass())
+		if (const UClass* Class = GetClass())
 		{
-			if (FProperty* AutoRegisterProperty = Class->FindPropertyByName(GET_MEMBER_NAME_CHECKED(ThisClass, bAutoRegisterWithSystemPhases)))
+			if (const FProperty* AutoRegisterProperty = Class->FindPropertyByName(GET_MEMBER_NAME_CHECKED(ThisClass, bAutoRegisterWithSystemPhases)))
 			{
 				UpdateSinglePropertyInConfigFile(AutoRegisterProperty, *GetDefaultConfigFilename());
 			}
@@ -167,7 +176,7 @@ void UFlecsSystem::InitializeInternal(UObject& InOwner, const FFlecsWorld& InFle
 	// Default implementation does nothing
 }
 
-void UFlecsSystem::BuildSystem(const flecs::system_builder<>& SystemBuilder)
+void UFlecsSystem::BuildSystem(flecs::system_builder<>& SystemBuilder)
 {
 	// TODO
 }

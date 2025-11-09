@@ -86,12 +86,12 @@ protected:
 	/** Called to initialize the system's internal state. Override to perform custom steps. */
 	UE_API virtual void InitializeInternal(UObject& InOwner, const FFlecsWorld& InFlecsWorld);
 
-	UE_API virtual void BuildSystem(const flecs::system_builder<>& SystemBuilder);
+	UE_API virtual void BuildSystem(flecs::system_builder<>& SystemBuilder);
 
 	UE_API virtual void PostInitProperties() override;
 
 	/** Called during the system phase to which this system is registered. */
-	UE_API virtual void Run(flecs::iter& Iterator) PURE_VIRTUAL(UFlecsSystem::Run,);
+	UE_API virtual void Run(flecs::iter& Iterator) PURE_VIRTUAL(UFlecsSystem::Run, Iterator.fini(););
 
 protected:
 	/** Configures when this given system can be executed. */

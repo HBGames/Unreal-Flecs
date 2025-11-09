@@ -2,6 +2,8 @@
 
 #include "FlecsSubsystemBase.h"
 
+#include "FlecsEntitySubsystem.h"
+
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlecsSubsystemBase)
 
 namespace UE::Flecs
@@ -12,8 +14,13 @@ namespace UE::Flecs
 		{
 			if (UFlecsEntitySubsystem* EntitySubsystem = InCollection.InitializeDependency<UFlecsEntitySubsystem>())
 			{
-				RegisterSubsystemType(EntitySubsystem->GetMutableEntityManager().AsShared(), InSubsystemClass, MoveTemp(InTraits));
+				RegisterSubsystemType(EntitySubsystem->GetFlecsWorld(), InSubsystemClass, MoveTemp(InTraits));
 			}
+		}
+
+		void RegisterSubsystemType(const FFlecsWorld& InFlecsWorld, TSubclassOf<USubsystem> InSubsystemClass, FSubsystemTypeTraits&& InTraits)
+		{
+			
 		}
 	}
 
