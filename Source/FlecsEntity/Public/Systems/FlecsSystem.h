@@ -39,10 +39,10 @@ public:
 	/** Calls flecs system builder and handles initialization bookkeeping. */
 	UE_API void CallInitialize(const TNotNull<UObject*> InOwner, const FFlecsWorld& InFlecsWorld);
 
-	ESystemExecutionFlags GetExecutionFlags() const;
+	EFlecsSystemExecutionFlags GetExecutionFlags() const;
 
 	/** Whether this system should execute according the CurrentExecutionFlags parameters */
-	bool ShouldExecute(const ESystemExecutionFlags CurrentExecutionFlags) const;
+	bool ShouldExecute(const EFlecsSystemExecutionFlags CurrentExecutionFlags) const;
 
 	/** Controls whether there can be multiple instances of a given class in a single FFlecsRuntimePipeline and during dependency solving. */
 	bool ShouldAllowMultipleInstances() const;
@@ -106,7 +106,7 @@ protected:
 
 	/** Whether this system should be executed on StandAlone or Server or Client */
 	UPROPERTY(EditAnywhere, Category="Pipeline", meta=(Bitmask, BitmaskEnum="/Script/FlecsEntity.ESystemExecutionFlags"), Config)
-	uint8 ExecutionFlags = static_cast<int32>(ESystemExecutionFlags::Server | ESystemExecutionFlags::Standalone);
+	uint8 ExecutionFlags = static_cast<int32>(EFlecsSystemExecutionFlags::Server | EFlecsSystemExecutionFlags::Standalone);
 
 	/** Configures whether this system should be automatically included in the global list of systems executed every tick (see ExecuteInPhase and ExecutionOrder). */
 	UPROPERTY(EditDefaultsOnly, Category="System", Config)

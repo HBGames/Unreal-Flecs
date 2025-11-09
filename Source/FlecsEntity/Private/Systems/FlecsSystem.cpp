@@ -63,14 +63,14 @@ void UFlecsSystem::CallInitialize(const TNotNull<UObject*> InOwner, const FFlecs
 	}
 }
 
-ESystemExecutionFlags UFlecsSystem::GetExecutionFlags() const
+EFlecsSystemExecutionFlags UFlecsSystem::GetExecutionFlags() const
 {
-	return static_cast<ESystemExecutionFlags>(ExecutionFlags);
+	return static_cast<EFlecsSystemExecutionFlags>(ExecutionFlags);
 }
 
-bool UFlecsSystem::ShouldExecute(const ESystemExecutionFlags CurrentExecutionFlags) const
+bool UFlecsSystem::ShouldExecute(const EFlecsSystemExecutionFlags CurrentExecutionFlags) const
 {
-	return (GetExecutionFlags() & CurrentExecutionFlags) != ESystemExecutionFlags::None;
+	return (GetExecutionFlags() & CurrentExecutionFlags) != EFlecsSystemExecutionFlags::None;
 }
 
 bool UFlecsSystem::ShouldAllowMultipleInstances() const

@@ -8,7 +8,7 @@
 
 UFlecsSystem_NavMeshPathFollow::UFlecsSystem_NavMeshPathFollow()
 {
-	ExecutionFlags = (int32)ESystemExecutionFlags::AllNetModes;
+	ExecutionFlags = (int32)EFlecsSystemExecutionFlags::AllNetModes;
 	ExecuteInPhase = UFlecsPhase_OnUpdate::StaticClass();
 }
 

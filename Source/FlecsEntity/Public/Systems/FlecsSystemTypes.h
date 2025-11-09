@@ -8,7 +8,7 @@
  * 
  */
 UENUM(meta=(Bitflags, UseEnumValuesAsMaskValuesInEditor="true"))
-enum class ESystemExecutionFlags : uint8
+enum class EFlecsSystemExecutionFlags : uint8
 {
 	None = 0 UMETA(Hidden),
 	Standalone = 1 << 0,
@@ -21,4 +21,4 @@ enum class ESystemExecutionFlags : uint8
 	All = Standalone | Server | Client | Editor | EditorWorld UMETA(Hidden)
 };
 
-ENUM_CLASS_FLAGS(ESystemExecutionFlags);
+ENUM_CLASS_FLAGS(EFlecsSystemExecutionFlags);
