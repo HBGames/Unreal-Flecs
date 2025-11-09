@@ -74,6 +74,26 @@ void UFlecsSignalSubsystem::SignalEntitiesDeferred(FFlecsWorld& FlecsWorld, FNam
 	UE_CVLOG(Entities.Num() > 1, this, LogFlecsSignals, Log, TEXT("Raising deferred signal [%s] to %d entities"), *SignalName.ToString(), Entities.Num());
 }
 
+void UFlecsSignalSubsystem::DelaySignalEntityDeferred(FFlecsWorld& FlecsWorld, FName SignalName, const FFlecsEntityView Entity, const float DelayInSeconds)
+{
+	checkf(Entity.IsSet(), TEXT("Expecting a valid entity to signal"));
+	DelaySignalEntitiesDeferred(FlecsWorld, SignalName, MakeArrayView(&Entity, 1), DelayInSeconds);
+}
+
+void UFlecsSignalSubsystem::DelaySignalEntitiesDeferred(FFlecsWorld& FlecsWorld, FName SignalName, TConstArrayView<FFlecsEntityView> Entities, const float DelayInSeconds)
+{
+	checkf(Entities.Num() > 0, TEXT("Expecting entities to signal"));
+
+	FlecsWorld.Defer([SignalName, InEntities = TArray<FFlecsEntityView>(Entities), &FlecsWorld, &DelayInSeconds]()
+	{
+		UFlecsSignalSubsystem* SignalSubsystem = UWorld::GetSubsystem<UFlecsSignalSubsystem>(FlecsWorld.GetWorld());
+		SignalSubsystem->DelaySignalEntities(SignalName, InEntities, DelayInSeconds);
+	});
+
+	UE_CVLOG(Entities.Num() == 1, this, LogFlecsSignals, Log, TEXT("Delay deferred signal [%s] to entity [%s] in %.2f"), *SignalName.ToString(), *Entities[0].DebugGetDescription(), DelayInSeconds);
+	UE_CVLOG(Entities.Num() > 1, this, LogFlecsSignals, Log, TEXT("Delay deferred signal [%s] to %d entities in %.2f"), *SignalName.ToString(), Entities.Num(), DelayInSeconds);
+}
+
 void UFlecsSignalSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

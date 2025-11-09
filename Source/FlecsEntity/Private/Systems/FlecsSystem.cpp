@@ -178,7 +178,6 @@ void UFlecsSystem::InitializeInternal(UObject& InOwner, const FFlecsWorld& InFle
 
 void UFlecsSystem::BuildSystem(flecs::system_builder<>& SystemBuilder)
 {
-	// TODO
 }
 
 void UFlecsSystem::PostInitProperties()

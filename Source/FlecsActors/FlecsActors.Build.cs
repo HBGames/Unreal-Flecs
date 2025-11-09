@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class FlecsAIBehavior : ModuleRules
+public class FlecsActors : ModuleRules
 {
-	public FlecsAIBehavior(ReadOnlyTargetRules Target) : base(Target)
+	public FlecsActors(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -19,7 +19,6 @@ public class FlecsAIBehavior : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"FlecsActors",
 			}
 		);
 	}

@@ -31,8 +31,8 @@ public:
 	UE_API UFlecsEntitySubsystem();
 	UE_API ~UFlecsEntitySubsystem();
 
-	const FFlecsWorld& GetFlecsWorld() const { return FlecsWorld; }
-	FFlecsWorld& GetMutableFlecsWorld() { return FlecsWorld; }
+	UE_API const FFlecsWorld& GetFlecsWorld() const { return FlecsWorld; }
+	UE_API FFlecsWorld& GetMutableFlecsWorld() { return FlecsWorld; }
 
 protected:
 	FFlecsWorld FlecsWorld;

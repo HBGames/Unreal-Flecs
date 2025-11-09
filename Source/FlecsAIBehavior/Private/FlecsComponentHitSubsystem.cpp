@@ -1,7 +1,11 @@
 ﻿// Copyright Hitbox Games, LLC. All Rights Reserved.
 
 #include "FlecsComponentHitSubsystem.h"
+
+#include "FlecsAgentComponent.h"
+#include "FlecsAgentSubsystem.h"
 #include "Components/CapsuleComponent.h"
+#include "FlecsSignals/Public/FlecsSignalSubsystem.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlecsComponentHitSubsystem)
 
@@ -39,7 +43,7 @@ void UFlecsComponentHitSubsystem::Initialize(FSubsystemCollectionBase& Collectio
 	{
 		if (UCapsuleComponent* CapsuleComponent = AgentComponent.GetOwner()->FindComponentByClass<UCapsuleComponent>())
 		{
-			RegisterForComponentHit(AgentComponent.GetEntityHandle(), *CapsuleComponent);
+			RegisterForComponentHit(AgentComponent.GetEntityView(), *CapsuleComponent);
 		}
 	});
 
@@ -47,7 +51,7 @@ void UFlecsComponentHitSubsystem::Initialize(FSubsystemCollectionBase& Collectio
 	{
 		if (UCapsuleComponent* CapsuleComponent = AgentComponent.GetOwner()->FindComponentByClass<UCapsuleComponent>())
 		{
-			UnregisterForComponentHit(AgentComponent.GetEntityHandle(), *CapsuleComponent);
+			UnregisterForComponentHit(AgentComponent.GetEntityView(), *CapsuleComponent);
 		}
 	});
 
@@ -93,7 +97,7 @@ void UFlecsComponentHitSubsystem::RegisterForComponentHit(const FFlecsEntityView
 	CapsuleComponent.OnComponentHit.AddDynamic(this, &UFlecsComponentHitSubsystem::OnHitCallback);
 }
 
-void UFlecsComponentHitSubsystem::UnregisterForComponentHit(FFlecsEntityView Entity, UCapsuleComponent& CapsuleComponent)
+void UFlecsComponentHitSubsystem::UnregisterForComponentHit(const FFlecsEntityView Entity, UCapsuleComponent& CapsuleComponent)
 {
 	EntityToComponentMap.Remove(Entity);
 	ComponentToEntityMap.Remove(&CapsuleComponent);
