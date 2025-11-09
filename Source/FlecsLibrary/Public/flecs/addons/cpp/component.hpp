@@ -15,6 +15,7 @@
 #include "flecs/Unreal/FlecsScriptClassComponent.h"
 #include "flecs/Unreal/FlecsScriptStructComponent.h"
 #include "flecs/Unreal/FlecsTypeMapComponent.h"
+#include "flecs/Unreal/FlecsTypeRegisteredDelegate.h"
 
 /**
  * @defgroup cpp_components Components
@@ -315,6 +316,8 @@ struct type_impl {
             }
             
             #endif
+
+            FlecsLibrary::GetTypeRegisteredDelegate().Broadcast(c);
         }
 
         ecs_os_perf_trace_pop("flecs.type_impl.register_id");

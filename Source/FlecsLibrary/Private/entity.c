@@ -1708,6 +1708,13 @@ void ecs_delete(
             flecs_defer_begin(world, stage);
         }
 
+        /* Entity is still in use by a query */
+        ecs_assert((world->flags & EcsWorldQuit) || 
+                !flecs_component_is_delete_locked(world, entity), 
+            ECS_INVALID_OPERATION, 
+            "cannot delete '%s' as it is still in use by queries",
+                flecs_errstr(ecs_id_str(world, entity)));
+
         table = r->table;
 
         if (table) { /* NULL if entity got cleaned up as result of cycle */
@@ -1867,12 +1874,20 @@ ecs_entity_t ecs_clone(
     if (src_r->row & EcsEntityHasDontFragment) {
         ecs_component_record_t *cur = world->cr_non_fragmenting_head;
         while (cur) {
-            ecs_assert(cur->flags & EcsIdSparse, ECS_INTERNAL_ERROR, NULL);
-            if (cur->sparse) {
-                void *src_ptr = flecs_sparse_get(cur->sparse, 0, src);
-                if (src_ptr) {
-                    ecs_set_id(world, dst, cur->id, 
-                        flecs_ito(size_t, cur->type_info->size), src_ptr);
+            if (!ecs_id_is_wildcard(cur->id)) {
+                ecs_assert(cur->flags & EcsIdSparse, ECS_INTERNAL_ERROR, NULL);
+                if (cur->sparse) {
+                    if (cur->type_info) {
+                        void *src_ptr = flecs_sparse_get(cur->sparse, 0, src);
+                        if (src_ptr) {
+                            ecs_set_id(world, dst, cur->id, 
+                                flecs_ito(size_t, cur->type_info->size), src_ptr);
+                        }
+                    } else {
+                        if (flecs_sparse_has(cur->sparse, src)) {
+                            ecs_add_id(world, dst, cur->id);
+                        }
+                    }
                 }
             }
     

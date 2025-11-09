@@ -429,7 +429,7 @@ ecs_graph_edge_t* flecs_table_ensure_hi_edge(
     
     if (!edges->hi) {
         edges->hi = flecs_alloc_t(&world->allocator, ecs_map_t);
-        ecs_map_init_w_params(edges->hi, &world->allocators.ptr);
+        ecs_map_init(edges->hi, &world->allocator);
     }
 
     ecs_graph_edge_t **r = ecs_map_ensure_ref(edges->hi, ecs_graph_edge_t, id);
@@ -879,9 +879,9 @@ void flecs_add_overrides_for_base(
             ecs_id_t to_add = 0;
             if (ECS_HAS_ID_FLAG(id, AUTO_OVERRIDE)) {
                 to_add = id & ~ECS_AUTO_OVERRIDE;
-                ecs_component_record_t *cr = flecs_components_get(
-                    world, to_add);
-                if (cr && (cr->flags & EcsIdDontFragment)) {
+
+                ecs_flags32_t cr_flags = flecs_component_get_flags(world, to_add);
+                if (cr_flags & EcsIdDontFragment) {
                     to_add = 0;
 
                     /* Add flag to base table. Cheaper to do here vs adding an
