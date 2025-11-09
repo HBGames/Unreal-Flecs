@@ -16,6 +16,11 @@
 	"Installed": false,
 	"Modules": [
 		{
+			"Name": "FlecsActors",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "FlecsAIBehavior",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
@@ -26,22 +31,22 @@
 			"LoadingPhase": "PreDefault"
 		},
 		{
-			"Name": "FlecsLibrary",
-			"Type": "Runtime",
-			"LoadingPhase": "EarliestPossible"
-		},
-		{
-			"Name": "FlecsSignals",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "FlecsNavMeshNavigation",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "FlecsActors",
+			"Name": "FlecsLibrary",
+			"Type": "Runtime",
+			"LoadingPhase": "EarliestPossible"
+		},
+		{
+			"Name": "FlecsLOD",
+			"Type": "Runtime",
+			"LoadingPhase": "EarliestPossible"
+		},
+		{
+			"Name": "FlecsSignals",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
