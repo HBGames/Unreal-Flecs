@@ -155,7 +155,6 @@ void UFlecsEntitySettings::BuildSystemList()
 		if (SubClassess[i]->HasAnyClassFlags(CLASS_Abstract)) continue;
 
 		UFlecsSystem* SystemCDO = GetMutableDefault<UFlecsSystem>(SubClassess[i]);
-		// we explicitly restrict adding UMassCompositeProcessor. If needed by specific project a derived class can be added
 		if (SystemCDO && SubClassess[i]
 #if WITH_EDITOR
 			&& SystemCDO->ShouldShowUpInSettings()
