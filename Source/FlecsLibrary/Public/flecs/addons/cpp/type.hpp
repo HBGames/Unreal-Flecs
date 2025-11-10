@@ -76,6 +76,22 @@ struct type {
     operator const type_t*() const {
         return type_;
     }
+
+	world_t* raw_world() const
+    {
+	    return world_;
+    }
+
+	const type_t* raw_type() const
+    {
+		return type_;
+	}
+
+	flecs::id_t raw_empty() const
+	{
+		return empty_;
+	}
+	
 private:
     world_t *world_;
     const type_t *type_;
