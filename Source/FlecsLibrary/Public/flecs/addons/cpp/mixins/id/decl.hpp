@@ -133,6 +133,21 @@ struct id {
     flecs::id_t raw_id() const {
         return id_;
     }
+	
+	/** Return flecs::world_t* value */
+	flecs::world_t* raw_world() const {
+    	return world_;
+    }
+
+	void set_raw_id(flecs::id_t id)
+    {
+    	id_ = id;
+    }
+
+	void set_raw_world(flecs::world_t *world)
+    {
+    	world_ = world;
+    }
 
     operator flecs::id_t() const {
         return id_;
