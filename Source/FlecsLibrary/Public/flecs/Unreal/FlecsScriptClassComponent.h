@@ -15,17 +15,17 @@ struct FLECSLIBRARY_API FFlecsScriptClassComponent
 {
     GENERATED_BODY()
 
-    NO_DISCARD FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptClassComponent& InScriptStructComponent)
+    [[nodiscard]] FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptClassComponent& InScriptStructComponent)
     {
         return GetTypeHash(InScriptStructComponent.ScriptClass);
     }
 
-    NO_DISCARD FORCEINLINE friend bool operator==(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
+    [[nodiscard]] FORCEINLINE friend bool operator==(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
     {
         return Lhs.ScriptClass == Rhs.ScriptClass;
     }
 
-    NO_DISCARD FORCEINLINE friend bool operator!=(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
+    [[nodiscard]] FORCEINLINE friend bool operator!=(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
     {
         return !(Lhs == Rhs);
     }

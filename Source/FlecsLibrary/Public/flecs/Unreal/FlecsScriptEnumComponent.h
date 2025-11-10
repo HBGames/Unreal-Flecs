@@ -11,17 +11,17 @@ struct FLECSLIBRARY_API FFlecsScriptEnumComponent
 {
 	GENERATED_BODY()
 
-	NO_DISCARD FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptEnumComponent& InScriptEnumComponent)
+	[[nodiscard]] FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptEnumComponent& InScriptEnumComponent)
 	{
 		return GetTypeHash(InScriptEnumComponent.ScriptEnum);
 	}
 
-	NO_DISCARD FORCEINLINE friend bool operator==(const FFlecsScriptEnumComponent& Lhs, const FFlecsScriptEnumComponent& Rhs)
+	[[nodiscard]] FORCEINLINE friend bool operator==(const FFlecsScriptEnumComponent& Lhs, const FFlecsScriptEnumComponent& Rhs)
 	{
 		return Lhs.ScriptEnum == Rhs.ScriptEnum;
 	}
 
-	NO_DISCARD FORCEINLINE friend bool operator!=(const FFlecsScriptEnumComponent& Lhs, const FFlecsScriptEnumComponent& Rhs)
+	[[nodiscard]] FORCEINLINE friend bool operator!=(const FFlecsScriptEnumComponent& Lhs, const FFlecsScriptEnumComponent& Rhs)
 	{
 		return !(Lhs == Rhs);
 	}
