@@ -21,7 +21,7 @@ struct UE_API FFlecsType
 	FFlecsType() = default;
 
 	UE_NODISCARD_CTOR FFlecsType(const flecs::type& InType)
-		: world_(InType), type_(InType)
+		: world_(InType.raw_world()), type_(InType.raw_type()), empty_(InType.raw_empty())
 	{
 	}
 
