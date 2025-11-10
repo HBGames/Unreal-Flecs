@@ -26,6 +26,11 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "FlecsEngine",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "FlecsEntity",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault"

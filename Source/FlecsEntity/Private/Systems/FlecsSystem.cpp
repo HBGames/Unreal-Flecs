@@ -59,6 +59,11 @@ void UFlecsSystem::CallInitialize(const TNotNull<UObject*> InOwner, const FFlecs
 
 		InitializeInternal(*InOwner, InFlecsWorld);
 
+		using std::placeholders::_1;
+		System.run(std::bind(&UFlecsSystem::Run, this, _1));
+
+		OwnedSystem = System.build();
+
 		bInitialized = true;
 	}
 }

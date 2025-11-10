@@ -127,8 +127,69 @@ struct FFlecsWorld
 	/** Deletes and recreates the world. */
 	void Reset() { World.reset(); }
 
+	/** Create a new pipeline. */
+	flecs::pipeline_builder<> Pipeline() const { return World.pipeline(); }
+
+	/** Create a new pipeline.
+	 *
+	 * @tparam Pipeline Type associated with pipeline.
+	 * @return A pipeline builder.
+	 */
+	template <typename Pipeline, flecs::if_not_t<flecs::is_enum<Pipeline>::value> = 0>
+	flecs::pipeline_builder<> PipelineBuilder() const { return World.pipeline<Pipeline>(); }
+
 	/** Obtain pointer to C world object. */
 	flecs::world_t* C_Ptr() const { return World.c_ptr(); }
+
+	/** Set pipeline.
+	 * @see ecs_set_pipeline
+	 */
+	void SetPipeline(const FFlecsEntity InPipelineEntity) const { World.set_pipeline(InPipelineEntity.Entity()); }
+
+	/** Set pipeline. */
+	template <typename Pipeline>
+	void SetPipeline() const { World.template set_pipeline<Pipeline>(); }
+
+	/** Get pipeline. */
+	FFlecsEntity GetPipeline() const { return FFlecsEntity(World.get_pipeline()); }
+
+	/** Progress world one tick.
+	 * @see ecs_progress
+	 */
+	bool Progress(const ecs_ftime_t DeltaTime = 0) const { return World.progress(DeltaTime); }
+
+	/** Set timescale.
+	 * @see ecs_set_time_scale
+	 */
+	void SetTimeScale(const ecs_ftime_t Multiplier) const { World.set_time_scale(Multiplier); }
+
+	/** Set target FPS.
+	 * @see ecs_set_target_fps
+	 */
+	void SetTargetFPS(const ecs_ftime_t TargetFPS) const { World.set_target_fps(TargetFPS); }
+
+	/** Reset simulation clock.
+	 * @see ecs_reset_clock
+	 */
+	void ResetClock() const { World.reset_clock(); }
+
+	/** Set number of threads.
+	 * @see ecs_set_threads
+	 */
+	void SetThreads(const int32 InThreads) const { World.set_threads(InThreads); }
+
+	/** Get number of threads. */
+	int32 GetThreads() const { return World.get_threads(); }
+
+	/** Set number of task threads.
+	 * @see ecs_set_task_threads
+	 */
+	void SetTaskThreads(const int32 InTaskThreads) const { World.set_task_threads(InTaskThreads); }
+
+	/** Returns true if task thread use has been requested.
+	 * @see ecs_uses_task_threads
+	 */
+	bool UsesTaskThreads() const { return World.using_task_threads(); }
 
 	/** Signal application should quit. After calling this operation, the next call to Progress() returns false. */
 	void Quit() const { World.quit(); }
@@ -488,12 +549,12 @@ struct FFlecsWorld
 
 	/** Set singleton component. */
 	template <typename T, flecs::if_t<!flecs::is_callable<T>::value> = 0>
-	void Set() const { World.set<T>(); }
+	void Set(T&& InValue) const { World.set<T>(Forward<T>(InValue)); }
 
 	/** Set singleton pair. */
 	template <typename First, typename Second, typename P = flecs::pair<First, Second>,
 	          typename A = flecs::actual_type_t<P>, flecs::if_not_t<flecs::is_pair<First>::value> = 0>
-	void Set(const Second& InValue) const { World.set<First, Second, P, A>(InValue); }
+	void Set(const A& InValue) const { World.set<First, Second, P, A>(InValue); }
 
 	/** Set singleton pair. */
 	template <typename First, typename Second, typename P = flecs::pair<First, Second>,
@@ -502,7 +563,7 @@ struct FFlecsWorld
 
 	/** Set singleton pair. */
 	template <typename First, typename Second>
-	void Set() const { World.set<First, Second>(); }
+	void Set(Second InSecond, const First& InValue) const { World.set<First, Second>(InSecond, InValue); }
 
 	/** Set singleton pair. */
 	template <typename First, typename Second>
@@ -1026,6 +1087,24 @@ struct FFlecsWorld
 
 	template <typename... Comps, typename... Args>
 	flecs::system_builder<Comps...> System(Args&&... InArgs) const { return World.system<Comps...>(Forward<Args>(InArgs)...); }
+
+	/** Define a module.
+	 * This operation is not mandatory, but can be called inside the module ctor to
+	 * obtain the entity associated with the module, or override the module name.
+	 * 
+	 * @tparam Module module class.
+	 * @return Module entity.
+	 */
+	template <typename Module>
+	FFlecsEntity Module(const FString& InName) const { return FFlecsEntity(World.module<Module>(reinterpret_cast<const char*>(StringCast<UTF8CHAR>(*InName).Get()))); }
+
+	/** Import a module.
+	 * 
+	 * @tparam Module module class.
+	 * @return Module entity.
+	 */
+	template <typename Module>
+	FFlecsEntity Import() { return FFlecsEntity(World.import<Module>()); }
 
 private:
 	flecs::world World;
