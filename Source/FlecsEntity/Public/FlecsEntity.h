@@ -27,8 +27,8 @@ struct UE_API FFlecsEntity : public FFlecsEntityView
 
 	UE_NODISCARD_CTOR FFlecsEntity(const flecs::entity& InEntity)
 	{
-		world_ = InEntity.raw_world();
 		id_ = InEntity.raw_id();
+		world_ = InEntity.raw_world();
 	}
 
 	/** Create entity.
@@ -89,7 +89,7 @@ struct UE_API FFlecsEntity : public FFlecsEntityView
 	{
 	}
 
-	flecs::entity Entity() const { return BitCast<flecs::entity>(*this); }
+	flecs::entity Entity() const { return flecs::entity(world_, id_); }
 
 	/** Get mutable component value.
 	 * This operation returns a mutable reference to the component. If the entity
@@ -369,7 +369,10 @@ public:
 	}
 };
 
-static_assert(sizeof(FFlecsEntity) == sizeof(flecs::entity), "FFlecsEntity size not equal to flecs::entity");
+static_assert(std::is_trivially_copyable_v<FFlecsEntity>, "FFlecsEntity must be trivially copyable for BitCast");
+static_assert(std::is_trivially_copyable_v<flecs::entity>, "flecs::entity must be trivially copyable for BitCast");
+static_assert(sizeof(FFlecsEntity) == sizeof(flecs::entity), "FFlecsEntity and flecs::entity must have same size");
+static_assert(alignof(FFlecsEntity) == alignof(flecs::entity), "FFlecsEntity and flecs::entity must have same alignment");
 
 template <>
 struct TStructOpsTypeTraits<FFlecsEntity> : public TStructOpsTypeTraitsBase2<FFlecsEntity>
