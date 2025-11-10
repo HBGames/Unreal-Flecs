@@ -46,7 +46,14 @@ struct UE_API FFlecsEntityView : public FFlecsId
 	bool operator==(const Self& Other) const { return id_ == Other.id_; }
 	bool operator!=(const Self& Other) const { return !(*this == Other); }
 
-	flecs::entity_view View() const { return BitCast<flecs::entity_view>(*this); }
+	flecs::entity_view View() const
+	{
+		// Constructor tries to get the real world which can sometimes be invalid. Do a direct copy.
+		flecs::entity_view ReturnValue;
+		ReturnValue.set_raw_id(id_);
+		ReturnValue.set_raw_world(world_);
+		return ReturnValue;
+	}
 
 	FString DebugGetDescription() const { return FString::Printf(TEXT("id: %llu, name: %s"), id_, *Name()); }
 
