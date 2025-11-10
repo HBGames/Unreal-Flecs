@@ -87,7 +87,7 @@ inline flecs::entity world::module(const char *name) const {
         flecs::entity prev_parent = result.parent();
         ecs_add_path_w_sep(world_, result, 0, name, "::", "::");
         flecs::entity parent = result.parent();
-        if (prev_parent.id() != parent.id()) {
+        if (prev_parent != parent) {
             // Module was reparented, cleanup old parent(s)
             flecs::entity cur = prev_parent, next;
             while (cur) {

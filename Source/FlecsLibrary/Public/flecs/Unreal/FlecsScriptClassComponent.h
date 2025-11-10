@@ -6,6 +6,8 @@
 
 #include "Templates/SubclassOf.h"
 
+#include "Standard/Hashing.h"
+
 #include "FlecsScriptClassComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -13,17 +15,17 @@ struct FLECSLIBRARY_API FFlecsScriptClassComponent
 {
     GENERATED_BODY()
 
-    [[nodiscard]] FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptClassComponent& InScriptStructComponent)
+    NO_DISCARD FORCEINLINE friend uint32 GetTypeHash(const FFlecsScriptClassComponent& InScriptStructComponent)
     {
         return GetTypeHash(InScriptStructComponent.ScriptClass);
     }
 
-    [[nodiscard]] FORCEINLINE friend bool operator==(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
+    NO_DISCARD FORCEINLINE friend bool operator==(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
     {
         return Lhs.ScriptClass == Rhs.ScriptClass;
     }
 
-    [[nodiscard]] FORCEINLINE friend bool operator!=(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
+    NO_DISCARD FORCEINLINE friend bool operator!=(const FFlecsScriptClassComponent& Lhs, const FFlecsScriptClassComponent& Rhs)
     {
         return !(Lhs == Rhs);
     }
@@ -42,9 +44,5 @@ struct FLECSLIBRARY_API FFlecsScriptClassComponent
     
 }; // struct FFlecsScriptClassComponent
 
-template <>
-struct std::hash<FFlecsScriptClassComponent>
-{
-public:
-	inline std::size_t operator()(const FFlecsScriptClassComponent& Value) const noexcept { return GetTypeHash(Value); }
-};
+DEFINE_STD_HASH(FFlecsScriptClassComponent)
+

@@ -138,15 +138,6 @@ struct id {
         return id_;
     }
 
-	/** Return flecs::world_ value */
-	flecs::world_t *raw_world() const {
-    	return world_;
-    }
-
-	operator flecs::world_t*() const {
-    	return world_;
-    }
-
     flecs::world world() const;
 
 protected:

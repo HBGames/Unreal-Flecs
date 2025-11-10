@@ -8,10 +8,9 @@
 #include <ctype.h>
 #include <optional>
 #include <stdio.h>
-#include <string>
 
-#include "Concepts/BaseStructureProvider.h"
 #include "flecs/os_api.h"
+#include "Concepts/SolidConcepts.h"
 #include "flecs/Unreal/FlecsScriptClassComponent.h"
 #include "flecs/Unreal/FlecsScriptStructComponent.h"
 #include "flecs/Unreal/FlecsTypeMapComponent.h"
@@ -149,7 +148,7 @@ FLECSLIBRARY_API extern robin_hood::unordered_map<std::string, type_impl_data> g
         std::string key = std::string(_::type_name<T>());  // => Solid::type_name<T>()
     
         auto it = g_type_to_impl_data.find(key);
-        if (it != g_type_to_impl_data.end()) [[likely]]{
+        if LIKELY_IF(it != g_type_to_impl_data.end()) {
             ecs_os_perf_trace_pop("flecs.type_impl.init");
             return it->second;
         }
@@ -179,7 +178,7 @@ FLECSLIBRARY_API extern robin_hood::unordered_map<std::string, type_impl_data> g
     {
         const std::string key = std::string(_::type_name<T>());
         auto it = g_type_to_impl_data.find(key);
-        if (it != g_type_to_impl_data.end()) [[likely]] {
+        if LIKELY_IF(it != g_type_to_impl_data.end()) {
             return &it->second;
         }
         return nullptr;
@@ -260,7 +259,7 @@ struct type_impl {
                 register_lifecycle_actions<T>(world, c);
             }
 
-            if constexpr (TModels<CBaseStructureProvider, T>::Value || TModels_V<CStaticStructProvider, T> && !std::is_same_v<T, FFlecsScriptStructComponent>)
+            if constexpr (Solid::IsScriptStruct<T>() && !std::is_same_v<T, FFlecsScriptStructComponent>)
             {
                 flecs::world P_world(world);
                 UScriptStruct* scriptStruct = TBaseStructure<T>::Get();
@@ -275,7 +274,7 @@ struct type_impl {
                 entity_id.set<FFlecsScriptStructComponent>({ scriptStruct });
             }
 
-            if constexpr (TModels<CStaticClassProvider, T>::Value)
+            if constexpr (Solid::IsStaticClass<T>())
             {
                 flecs::world P_world(world);
                 UClass* scriptClass = StaticClass<T>();
@@ -300,7 +299,7 @@ struct type_impl {
             td.s_enum_registered = true;
             s_enum_registered = td.s_enum_registered;
 
-            if constexpr (TIsUEnumClass<T>::Value)
+            if constexpr (Solid::IsStaticEnum<T>())
             {
                 flecs::world P_world(world);
                 UEnum* scriptEnum = StaticEnum<T>();

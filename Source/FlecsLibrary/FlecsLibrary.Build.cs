@@ -112,14 +112,15 @@ public class FlecsLibrary : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
-                "CoreUObject",
+                "Core", 
+                "SolidMacros",
             }
         );
 
         PrivateDependencyModuleNames.AddRange(
             new string[]
             {
+                "CoreUObject",
                 "Engine",
             }
         );
